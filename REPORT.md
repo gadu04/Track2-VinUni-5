@@ -41,16 +41,20 @@ Ly do chon:
 - **Dam bao CI/CD doc duoc ket qua train:**
   - **Xu ly:** luu metric vao `outputs/metrics.json` va model vao `models/model.pkl` sau moi lan train.
 
+- **Gioi han cloud account (khong co billing):**
+  - **Van de:** khong the tao GCS bucket, `dvc push/pull` va deploy VM bi chan boi loi billing.
+  - **Xu ly tam thoi:** chuyen workflow sang local-only mode (generate data tren runner, train/eval binh thuong, mock deploy) de van bao dam quy trinh CI tu dong va tai lap duoc.
+
 ## 3) San pham da hoan thien trong repo
 
 - Hoan thanh `src/train.py` (doc du lieu, train, log MLflow, luu metric/model).
 - Hoan thanh `tests/test_train.py` (3 tests deu pass).
 - Hoan thanh `src/serve.py` (`/health`, `/predict`, tai model tu cloud storage).
-- Hoan thanh workflow `.github/workflows/mlops.yml` (Test -> Train -> Eval gate -> Deploy).
+- Hoan thanh workflow `.github/workflows/mlops.yml` (local-only: Test -> Train -> Eval -> Mock Deploy).
 
 ## 4) Bang chung can chup man hinh de nop
 
 - MLflow UI voi it nhat 3 runs.
-- GitHub Actions pipeline (4 jobs mau xanh).
-- Ket qua `curl /health` va `curl /predict` tren VM.
-- Cloud Storage hien thi du lieu DVC va model `models/latest/model.pkl`.
+- GitHub Actions pipeline (4 jobs mau xanh trong local-only mode).
+- Metrics artifact (`outputs/metrics.json`) va model artifact (`models/model.pkl`) duoc luu tu job Train.
+- Ghi chu han che cloud billing trong phan mo ta ket qua.
